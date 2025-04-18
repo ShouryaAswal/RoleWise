@@ -8,7 +8,6 @@ load_dotenv()
 
 # Use secrets if on Streamlit Cloud, else fallback to local .env
 API_URL = st.secrets["API_URL"] if "API_URL" in st.secrets else os.getenv("API_URL")
-
 st.title("🔍 SHL Assessment Recommender")
 
 # --- Health Check Section ---
