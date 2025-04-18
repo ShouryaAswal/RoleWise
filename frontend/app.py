@@ -6,14 +6,15 @@ from dotenv import load_dotenv
 # Load .env for local development
 load_dotenv()
 
-# Use secrets if on Streamlit Cloud, else fallback to local .env
-API_URL = st.secrets["API_URL"] if "API_URL" in st.secrets else os.getenv("API_URL")
+# Unified backend URL (used for both health and recommend)
+BACKEND_URL = st.secrets["BACKEND_URL"] if "BACKEND_URL" in st.secrets else os.getenv("BACKEND_URL")
+
 st.title("🔍 SHL Assessment Recommender")
 
 # --- Health Check Section ---
 if st.button("🔄 Check Backend Health"):
     try:
-        res = requests.get(f"{API_URL}/health")
+        res = requests.get(f"{BACKEND_URL}/health")
         if res.status_code == 200:
             st.success("✅ Backend is live and healthy!")
         else:
@@ -30,7 +31,7 @@ if st.button("📥 Get Recommendations"):
         st.warning("Please enter a job description or query.")
     else:
         try:
-            res = requests.post(f"{API_URL}/recommend", json={"query": query})
+            res = requests.post(f"{BACKEND_URL}/recommend", json={"query": query})
             if res.status_code == 200:
                 data = res.json()
                 if not data["recommendations"]:
