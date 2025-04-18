@@ -3,7 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-API_URL = os.getenv("API_URL")
+API_URL = os.getenv("URL")
 
 st.title("SHL Assessment Recommender")
 query = st.text_area("Enter Job Description or Query")
