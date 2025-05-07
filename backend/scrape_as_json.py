@@ -1,13 +1,9 @@
 # File: scraping_to_db.py
 import requests
 from bs4 import BeautifulSoup
-from supabase import create_client, Client
 import time
-
-SUPABASE_URL = "<YOUR_SUPABASE_URL>"
-SUPABASE_KEY = "<YOUR_SUPABASE_KEY>"
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+import os
+import json
 
 BASE_URL = "https://www.shl.com/solutions/products/product-catalog/?start={start}&type=2"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
@@ -52,35 +48,40 @@ def scrape_listing_page(start: int):
     return all_data
 
 def scrape_detail_page(url):
+    print(f"Scraping detail page: {url}")
     time.sleep(1)
     res = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(res.text, 'html.parser')
 
-    def extract_text(selector):
-        section = soup.select_one(selector)
-        return section.get_text(strip=True) if section else ""
+    def extract_text_by_heading(heading):
+        # Look for all .row divs, then h4 with the heading, then next <p>
+        for row_div in soup.select(".row"):
+            h4 = row_div.find("h4")
+            if h4 and heading.lower() in h4.get_text(strip=True).lower():
+                p = h4.find_next_sibling("p")
+                if p:
+                    return p.get_text(strip=True)
+        return ""
 
-    desc = extract_text(".shl-content h2:contains('Description') + p")
-    job_level = extract_text(".shl-content h2:contains('Job levels') + p")
-    lang = extract_text(".shl-content h2:contains('Languages') + p")
-    length = extract_text(".shl-content h2:contains('Assessment length') + p")
+    desc = extract_text_by_heading("Description")
+    job_level = extract_text_by_heading("Job levels")
+    lang = extract_text_by_heading("Languages")
+    length = extract_text_by_heading("Assessment length")
 
     blob = f"Description: {desc}\nJob Levels: {job_level}\nLanguages: {lang}"
     return {"length": length, "blob": blob}
 
-def upload_to_supabase(records):
-    for rec in records:
-        response = supabase.table("assessments").insert(rec).execute()
-        print(response)
+def save_jsonl(records, filename):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "w", encoding="utf-8") as f:
+        for rec in records:
+            json.dump(rec, f, ensure_ascii=False)
+            f.write("\n")
 
 if __name__ == "__main__":
     all_records = []
     for start in range(0, 12 * 12, 12):  # pages at intervals of 12
         records = scrape_listing_page(start)
         all_records.extend(records)
-
-        with open("scraped_output.txt", "a", encoding="utf-8") as f:
-            for rec in records:
-                f.write(str(rec) + "\n")
-
-        upload_to_supabase(records)
+    save_jsonl(all_records, os.path.join("context", "scraped_data.jsonl"))
+    print(f"Saved {len(all_records)} records to context/scraped_data.jsonl")

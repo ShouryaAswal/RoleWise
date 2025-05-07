@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from schemas import QueryRequest, QueryResponse
-from model import get_recommendations
+from backend.model import get_recommendations
 
 app = FastAPI()
 
