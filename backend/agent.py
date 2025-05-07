@@ -1,12 +1,15 @@
 import chromadb
 from chromadb.config import Settings
 from backend.model import call_openai
+import os
 
-CHROMA_COLLECTION = "scraped_docs"
+# Updated to match the collection name used in make_embeddings.py
+CHROMA_COLLECTION = "shl_assessments"
+CHROMA_PATH = os.path.join("context", "chromadb")
 
 def retrieve_context(query, top_k=3):
     chroma_client = chromadb.Client(Settings(
-        persist_directory="chroma_db"
+        persist_directory=CHROMA_PATH
     ))
     collection = chroma_client.get_collection(CHROMA_COLLECTION)
     results = collection.query(
