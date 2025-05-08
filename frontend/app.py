@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 # Load .env for local development
 load_dotenv()
 
-# Unified backend URL (used for both health and recommend)
-BACKEND_URL = st.secrets["BACKEND_URL"] if "BACKEND_URL" in st.secrets else os.getenv("BACKEND_URL")
+# Use os.getenv for BACKEND_URL to avoid Streamlit secrets error if secrets.toml is missing
+BACKEND_URL = os.getenv("BACKEND_URL")
 
 st.title("🔍 SHL Assessment Recommender")
 
@@ -16,9 +16,22 @@ st.title("Assessment Chatbot")
 query = st.text_input("Ask about assessments:")
 
 if st.button("Submit") and query:
-    response = requests.post(f"{BACKEND_URL}/query", json={"query": query})
-    data = response.json()
-    st.write("**Answer:**", data["answer"])
-    st.write("**Top 3 Assessments:**")
-    for meta in data["top_assessments"]:
-        st.write(meta)
+    with st.spinner("Getting answer..."):
+        response = requests.post(f"{BACKEND_URL}/query", json={"query": query})
+        st.write(f"Request sent to: {BACKEND_URL}/query")
+        if response.status_code == 200:
+            try:
+                data = response.json()
+            except Exception as e:
+                st.error(f"Error decoding JSON: {e}")
+                st.write("Raw response:", response.text)
+                data = {"answers": []}
+        else:
+            st.error(f"Backend error: {response.status_code}")
+            st.write("Raw response:", response.text)
+            data = {"answers": []}
+    st.write("**Answers:**")
+    for ans in data["answers"]:
+        st.markdown(f"**[{ans['title']}]({ans['url']})**")
+        st.write(ans["llm_answer"])
+        st.markdown("---")
