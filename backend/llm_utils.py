@@ -1,14 +1,29 @@
+import os
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
+from dotenv import load_dotenv
+
+load_dotenv()
+
 def generate_answer(query, context):
-    """
-    Generates an answer to a given query using the provided context.
-    
-    Args:
-        query (str): The user's query.
-        context (str): The context to use for generating the answer.
-    
-    Returns:
-        str: The generated answer.
-    """
-    # Placeholder for actual LLM call
-    # In a real implementation, this would call the LLM with the query and context
-    return f"Generated answer for query: '{query}' with context: '{context}'"
+    endpoint = "https://models.github.ai/inference"
+    model = "openai/gpt-4.1"
+    token = os.environ["GITHUB_TOKEN"]
+
+    client = ChatCompletionsClient(
+        endpoint=endpoint,
+        credential=AzureKeyCredential(token),
+    )
+
+    response = client.complete(
+        messages=[
+            SystemMessage(context or ""),
+            UserMessage(query),
+        ],
+        temperature=1,
+        top_p=1,
+        model=model
+    )
+
+    return response.choices[0].message.content
