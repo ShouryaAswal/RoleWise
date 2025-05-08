@@ -15,7 +15,7 @@ def process_query(query):
     docs, metas = get_top_k_assessments(query)
     answers = []
     for context, meta_item in zip(docs[0], metas[0]):
-        # Use info_blob from metadata as context
+      
         info_blob = meta_item.get("info_blob", "")
         title = meta_item.get("title", "Unknown Assessment")
         url = meta_item.get("detail_url", "#")

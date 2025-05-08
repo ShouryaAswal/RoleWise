@@ -2,12 +2,7 @@ fastapi
 uvicorn
 pydantic
 python-dotenv
-supabase
-bs4
 requests
 chromadb
-sentence-transformers
-langchain
-streamlit
 azure-ai-inference
 azure-core

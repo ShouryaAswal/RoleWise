@@ -3,10 +3,8 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# Load .env for local development
-load_dotenv()
 
-# Use os.getenv for BACKEND_URL to avoid Streamlit secrets error if secrets.toml is missing
+load_dotenv()
 BACKEND_URL = os.getenv("BACKEND_URL")
 
 st.title("🔍 SHL Assessment Recommender")

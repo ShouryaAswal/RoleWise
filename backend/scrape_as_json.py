@@ -1,4 +1,4 @@
-# File: scraping_to_db.py
+
 import requests
 from bs4 import BeautifulSoup
 import time
