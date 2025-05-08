@@ -16,7 +16,7 @@ st.title("Assessment Chatbot")
 query = st.text_input("Ask about assessments:")
 
 if st.button("Submit") and query:
-    response = requests.post("http://localhost:8000/query", json={"query": query})
+    response = requests.post(f"{BACKEND_URL}/query", json={"query": query})
     data = response.json()
     st.write("**Answer:**", data["answer"])
     st.write("**Top 3 Assessments:**")
