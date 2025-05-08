@@ -16,9 +16,15 @@ def generate_answer(query, context):
         credential=AzureKeyCredential(token),
     )
 
+    system_prompt = (
+        "You are an expert on SHL assessments. "
+        "Given the following assessment information, answer the user's query extremely concisely. "
+        "Your answer will contain 3 parts only. The title of the assessment, the URL to the assessment, and a small description of the assessment for each assessment in context. No more no less. "
+    )
+
     response = client.complete(
         messages=[
-            SystemMessage(context or ""),
+            SystemMessage(system_prompt + "\n\n" + (context or "")),
             UserMessage(query),
         ],
         temperature=1,

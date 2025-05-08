@@ -23,7 +23,7 @@ except json.JSONDecodeError:
 
 
 print("Creating/getting collection...")
-chroma_client = chromadb.Client()
+chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
 collection = chroma_client.create_collection("shl_assessments")
 
 print("Inserting records into ChromaDB...")
@@ -43,7 +43,8 @@ for idx, rec in enumerate(records):
             "title": rec.get("title", ""),
             "detail_url": rec.get("detail_url", ""),
             "test_type": rec.get("test_type", ""),
-            "assessment_length": rec.get("assessment_length", "")
+            "assessment_length": rec.get("assessment_length", ""),
+            "info_blob": rec.get("info_blob", "")
         }
         
   
