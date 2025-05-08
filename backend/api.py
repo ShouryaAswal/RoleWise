@@ -9,3 +9,7 @@ async def query_endpoint(request: Request):
     query = data.get("query", "")
     result = agentic_process(query)
     return result
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("api:app", host="0.0.0.0", port=10000)

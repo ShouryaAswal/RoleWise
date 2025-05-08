@@ -9,3 +9,5 @@ chromadb
 sentence-transformers
 langchain
 streamlit
+azure-ai-inference
+azure-core
