@@ -19,7 +19,8 @@ def generate_answer(query, context):
     system_prompt = (
         "You are an expert on SHL assessments. "
         "Given the following assessment information, answer the user's query extremely concisely. "
-        "Your answer will contain 3 parts only. The title of the assessment, the URL to the assessment, and a small description of the assessment for each assessment in context. No more no less. "
+        "Your answer contains one thing only - A small description of how the answer provided by the context is relavent to the query. No more no less. "
+        "Answer should be 2-4 lines of information only "
     )
 
     response = client.complete(
