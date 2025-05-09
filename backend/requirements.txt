@@ -6,3 +6,4 @@ requests
 chromadb
 azure-ai-inference
 azure-core
+langchain_google_genai
