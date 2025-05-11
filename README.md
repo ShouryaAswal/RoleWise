@@ -1,6 +1,24 @@
 # Assessment Recommendation System
 
-This project implements a RAG (Retrieval-Augmented Generation) powered multi-agent Q&A assistant that recommends SHL assessments based on user queries or job descriptions. The system intelligently retrieves relevant assessment information from SHL's product catalog and provides personalized recommendations.
+## The Problem
+
+Hiring managers often struggle to identify the most appropriate assessment tools for their recruitment needs. Traditional methods rely on keyword searches and filters that don't effectively match their specific requirements, resulting in suboptimal candidate evaluation and potentially poor hiring decisions.
+
+## The Solution
+
+The Assessment Recommendation System is an intelligent, AI-powered tool that bridges this gap by understanding natural language queries about job roles and recommending relevant SHL assessments. Built with a RAG (Retrieval-Augmented Generation) architecture and multi-agent workflow, the system interprets hiring managers' needs and matches them with appropriate assessment tools from SHL's extensive catalog.
+
+## Key Benefits
+
+- **Natural Language Understanding**: Simply describe the role or skills you need to assess - no need to know assessment terminology
+- **Contextual Relevance**: Recommendations consider the full context of your requirements, not just isolated keywords
+- **Time Efficiency**: Receive targeted recommendations instantly instead of manually filtering through assessment catalogs
+- **Decision Support**: Get concise explanations of why each assessment is relevant to your specific needs
+- **Accessibility**: Available through both a user-friendly web interface and API endpoints for programmatic access
+
+## Real-World Impact
+
+This project addresses a genuine pain point in recruitment processes. By providing intelligent, context-aware assessment recommendations, it helps organizations make more informed decisions about their talent assessment strategy, ultimately leading to better candidate evaluation and hiring outcomes.
 
 ## 📋 Project Overview
 
